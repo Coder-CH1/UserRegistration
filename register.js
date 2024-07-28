@@ -3,9 +3,17 @@ const app = express();
 const mysql = require('mysql2/promise');
 const bcrypt = require('bcrypt');
 const bodyParser = require('body-parser');
+const session = require('express-session')
 
+const secretKey = '@Agbachi_not_So_Bad_Name'
 app.use(bodyParser.json());
-
+app.use(session({
+secret: '',
+resave: false,
+saveUninitialized: true,
+cookie: {secure: false}
+}
+))
 const dbConfig = {
     host: 'localhost',
     user: 'username',
@@ -52,6 +60,10 @@ res.status(201).send('User registered successfully');
             if (!isValidPassword) {
                 return res.status(401).send('Invalid email or password');
             }
+            req.session.user = {
+                id: user.id,
+                email: user.email
+            };
             res.send('User logged in successfully');
         } catch(err) {
             console.error(err);
@@ -59,6 +71,15 @@ res.status(201).send('User registered successfully');
         }
     });
 
-    app.listen(3001, () => {
-        console.log('server listening on port 3001')
-    })
+app.post('/logout', (req, res) => {
+req.session.destroy(err => {
+    if (err) {
+        return res.status(500).send('Error logging out user');
+    }
+    res.send('User logged out successfully');
+});
+});
+
+app.listen(3002, () => {
+    console.log('server listening on port 3001')
+});
