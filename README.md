@@ -1,3 +1,3 @@
 # UserRegistration
 
-## User creation to be implemented in a SwiftUi project.
+## User creation API to be implemented in a SwiftUi project.
