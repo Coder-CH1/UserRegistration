@@ -1,3 +1,4 @@
+require('dotenv').config();
 const express = require('express');
 const app = express();
 const mysql = require('mysql2/promise');
@@ -5,10 +6,10 @@ const bcrypt = require('bcrypt');
 const bodyParser = require('body-parser');
 const session = require('express-session')
 
-const secretKey = '@Agbachi_not_So_Bad_Name'
+const secretKey = process.env.SESSION_SECRET;
 app.use(bodyParser.json());
 app.use(session({
-secret: '',
+secret: secretKey,
 resave: false,
 saveUninitialized: true,
 cookie: {secure: false}
