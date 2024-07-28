@@ -1,3 +1,3 @@
 # UserRegistration
 
-## User creation API to be implemented in a SwiftUi project.
+## This API provides endpoint for user registration, login and logout, designed to be integrated with Mobile Development Applications.
