@@ -5,9 +5,11 @@ const mysql = require('mysql2/promise');
 const bcrypt = require('bcrypt');
 const bodyParser = require('body-parser');
 const session = require('express-session')
-
+const nodemailer = require('nodemailer');
 const secretKey = process.env.SESSION_SECRET;
+
 app.use(bodyParser.json());
+
 app.use(session({
 secret: secretKey,
 resave: false,
@@ -80,7 +82,9 @@ req.session.destroy(err => {
     res.send('User logged out successfully');
 });
 });
+app.post('/send-code', async (req, res) => {
 
+});
 app.listen(3002, () => {
     console.log('server listening on port 3001')
 });
