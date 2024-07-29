@@ -6,6 +6,7 @@ const bcrypt = require('bcrypt');
 const bodyParser = require('body-parser');
 const session = require('express-session')
 const nodemailer = require('nodemailer');
+const speakeasy = require('speakeasy');
 const secretKey = process.env.SESSION_SECRET;
 
 app.use(bodyParser.json());
