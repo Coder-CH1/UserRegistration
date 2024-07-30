@@ -84,8 +84,61 @@ req.session.destroy(err => {
 });
 });
 app.post('/send-code', async (req, res) => {
+const { email } = req.body;
+if (!email){
+    return res.status(400).send('Email is required');
+}
+try {
+    const code = speakeasy.totp({
+        secret: process.env.SECRET_KEY,
+        encoding: 'base32'
+    });
+    const transporter = nodemailer.createTransport({
+service: 'emailer',
+auth: {
+    user: process.env.EMAIL_USER,
+    pass: process.env.EMAIL_PASS
+}
+    });
+    await transporter.sendMail({
+from: process.env.EMAIL_USER,
+to: email,
+subject: 'Your verification code',
+text: 'Your verfifcation code is : ${code}'
+    });
+    const expirationTime = new Date(Date.now() + 15 * 60 * 1000);
+    const query = 'INSERT INTO verification_codes (email, code, expiration) VALUES (?,?,?)';
+    await pool.execute(query, [email, code, expirationTime]);
 
+    res.send('Verification code sent successfully');
+} catch (err) {
+    console.log(err);
+    res.status(500).send('Error sending verification code');
+}
 });
+
+app.post('/verify-code', async (req, res) => {
+const {email, code} = req.body;
+if (!email || !code) {
+    return res.status(400).send('Eamil and code are required');
+} try {
+    const query = 'SELECT * FROM verification_codes WHERE email = ? AND code = ';
+    const [rows] = await pool.execute(query [email, code]);
+    if (rows.length === 0) {
+        return res.status(400).send('Invalid verification code');
+    }
+    const storedCode = rows[0];
+    if (new Date() > new Date(storedCode.expirationTime)) {
+        return res.status(400).send('Code has expired');
+    }
+    await pool.execute('DELETE FROM verification_codes WHERE email = ? AND code = ?', [storedCode]);
+    res.send('Code verified successfully');
+} catch (err) {
+    console.log(err);
+    res.status(500).send('Error verifying code');
+}
+});
+
 app.listen(3002, () => {
     console.log('server listening on port 3001')
 });
