@@ -138,7 +138,7 @@ if (!email || !code) {
     res.status(500).send('Error verifying code');
 }
 });
-
-app.listen(3002, () => {
-    console.log('server listening on port 3001')
+const port = process.env.PORT || 3004;
+app.listen(port, () => {
+    console.log('server listening on port 3004')
 });
