@@ -94,7 +94,7 @@ try {
         encoding: 'base32'
     });
     const transporter = nodemailer.createTransport({
-service: 'emailer',
+service: 'gmail',
 auth: {
     user: process.env.EMAIL_USER,
     pass: process.env.EMAIL_PASS
@@ -106,6 +106,7 @@ to: email,
 subject: 'Your verification code',
 text: 'Your verfifcation code is : ${code}'
     });
+    
     const expirationTime = new Date(Date.now() + 15 * 60 * 1000);
     const query = 'INSERT INTO verification_codes (email, code, expiration) VALUES (?,?,?)';
     await pool.execute(query, [email, code, expirationTime]);
