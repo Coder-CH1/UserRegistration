@@ -104,7 +104,7 @@ auth: {
 from: process.env.EMAIL_USER,
 to: email,
 subject: 'Your verification code',
-text: 'Your verfifcation code is : ${code}'
+text: `Your verfifcation code is : ${code}`
     });
     
     const expirationTime = new Date(Date.now() + 15 * 60 * 1000);
@@ -141,5 +141,5 @@ if (!email || !code) {
 });
 const port = process.env.PORT || 3004;
 app.listen(port, () => {
-    console.log('server listening on port 3004')
+    console.log(`server listening on port 3004`)
 });
