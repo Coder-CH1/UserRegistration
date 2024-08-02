@@ -30,7 +30,7 @@ app.post('/register', async (req, res) => {
     res.send('User registration successful');
     const { email, password, dateOfBirth, nickname} = req.body;
     if (!email || !password || !dateOfBirth || !nickname) {
-        return res.status(404).send('All fields are required')
+        return res.status(404).send('All fields are required');
     }
     try {
         const hashedPassword = await bcrypt.hash(password, 10);
@@ -86,7 +86,7 @@ req.session.destroy(err => {
 app.post('/send-code', async (req, res) => {
 const { email } = req.body;
 if (!email){
-    return res.status(400).send('Email is required');
+    return res.status(400).json({error: 'Email is required'});
 }
 try {
     const code = speakeasy.totp({
@@ -110,11 +110,11 @@ text: `Your verfifcation code is : ${code}`
     const expirationTime = new Date(Date.now() + 15 * 60 * 1000);
     const query = 'INSERT INTO verification_codes (email, code, expiration) VALUES (?,?,?)';
     await pool.execute(query, [email, code, expirationTime]);
-
-    res.send('Verification code sent successfully');
+    console.log('response', Json.stringify({message: 'verification code sent successfully'}));
+    res.json({message :'Verification code sent successfully'});
 } catch (err) {
     console.log(err);
-    res.status(500).send('Error sending verification code');
+    res.status(500).json({error: 'Error sending verification code'});
 }
 });
 
