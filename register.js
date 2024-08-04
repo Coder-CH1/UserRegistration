@@ -9,7 +9,9 @@ const nodemailer = require('nodemailer');
 const speakeasy = require('speakeasy');
 const secretKey = process.env.SESSION_SECRET;
 
+
 app.use(bodyParser.json());
+
 
 app.use(session({
 secret: secretKey,
@@ -18,13 +20,18 @@ saveUninitialized: true,
 cookie: {secure: false}
 }
 ))
+
+
 const dbConfig = {
     host: 'localhost',
     user: 'username',
     password: 'password',
     database: 'mysql'
 };
+
+
 const pool = mysql.createPool(dbConfig);
+
 
 app.post('/register', async (req, res) => {
     res.send('User registration successful');
@@ -45,6 +52,7 @@ res.status(201).send('User registered successfully');
         res.status(500).send('error registering user');
     }
     });
+
 
     app.post('/login', async (req, res) => {
         const { email, password} = req.body;
@@ -75,6 +83,7 @@ res.status(201).send('User registered successfully');
         }
     });
 
+
 app.post('/logout', (req, res) => {
 req.session.destroy(err => {
     if (err) {
@@ -83,6 +92,13 @@ req.session.destroy(err => {
     res.send('User logged out successfully');
 });
 });
+
+
+function generateOTP() {
+    return randomstring.generate({ length: 4, charset: 'numeric' });
+  }
+
+
 app.post('/send-code', async (req, res) => {
 const { email } = req.body;
 if (!email){
@@ -92,7 +108,7 @@ try {
     const code = speakeasy.totp({
         secret: process.env.SECRET_KEY,
         encoding: 'base32'
-    });
+    });  
     const transporter = nodemailer.createTransport({
 service: 'gmail',
 auth: {
@@ -118,6 +134,7 @@ text: `Your verfifcation code is : ${code}`
 }
 });
 
+
 app.post('/verify-code', async (req, res) => {
 const {email, code} = req.body;
 if (!email || !code) {
@@ -139,6 +156,22 @@ if (!email || !code) {
     res.status(500).send('Error verifying code');
 }
 });
+
+
+
+// app.post('/reqOTP', (req, res) => {
+//     const { email } = req.body;
+//     const otp = generateOTP();
+//     otpCache[email] = otp; // Store OTP in cache
+  
+//     console.log(otpCache);
+//     // Send OTP via email
+//     sendOTP(email, otp);
+//     res.cookie('otpCache', otpCache, { maxAge: 30000, httpOnly: true }); 
+//     console.log("OTP sent");
+//   });
+
+
 const port = process.env.PORT || 3004;
 app.listen(port, () => {
     console.log(`server listening on port 3004`)
