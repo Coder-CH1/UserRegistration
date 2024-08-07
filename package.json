@@ -2,15 +2,24 @@
   "dependencies": {
     "bcrypt": "^5.1.1",
     "body-parser": "^1.20.2",
+    "cookieparser": "^0.1.0",
     "cors": "^2.8.5",
+    "crypto": "^1.0.1",
     "crypto.js": "^3.2.2",
     "dotenv": "^16.4.5",
+    "ejs": "^3.1.10",
     "express": "^4.19.2",
     "express-session": "^1.18.0",
     "jsonwebtoken": "^9.0.2",
-    "mysql2": "^3.10.3",
+    "mailgun-js": "^0.22.0",
+    "morgan": "^1.10.0",
+    "mysql": "^2.18.1",
+    "mysql2": "^3.11.0",
     "nodemailer": "^6.9.14",
-    "speakeasy": "^2.0.0"
+    "sequelize": "^6.37.3",
+    "sequelize-cli": "^6.6.2",
+    "speakeasy": "^2.0.0",
+    "uuid": "^10.0.0"
   },
   "devDependencies": {
     "nodemon": "^3.1.4"
