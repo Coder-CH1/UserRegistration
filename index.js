@@ -32,7 +32,18 @@ res.render('register');
 app.use('/register', registerRoute);
 app.use('/login', loginRoute);
 app.use('/otp', validateOTP);
+  
+  process.on('uncaughtException', (err) => {
+    console.error('Uncaught exception:', err);
+    process.exit(1);
+  });
+  
+  process.on('unhandledRejection', (err) => {
+    console.error('Unhandled rejection:', err);
+  process.exit(1);
+  });
 
 app.listen(PORT, () => {
  console.log(`Server listening on port: : ${PORT}`)
 });
+
