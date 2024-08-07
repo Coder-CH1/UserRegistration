@@ -1,5 +1,5 @@
 const Router = require('express').Router();
-const mysql2 = require('../config/db');
+const sqlite = require('../config/db');
 
 
 Router.get('/',(req,res)=>{

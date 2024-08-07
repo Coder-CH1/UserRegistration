@@ -1,7 +1,7 @@
 const Router = require('express').Router();
 const users = require('../model/users');
 const {createSecurePassword} = require('../model/users');
-const mysql2 = require('../config/db');
+const sqlite = require('../config/db');
 
 require('dotenv').config();
 

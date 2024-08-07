@@ -1,5 +1,5 @@
 const crypto = require("crypto");
-const mysql2 = require("../config/db");
+const sqlite = require("../config/db");
 
 // function to create secured hashed passeord
 let createSecurePassword = (password, salt) => {

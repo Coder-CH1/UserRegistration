@@ -1,37 +1,33 @@
-const mysql2 = require('mysql2');
-require("dotenv").config();
+const Database = require('better-sqlite3');
+require('dotenv').config();
 
-const connection = mysql2.createConnection({
-  host: process.env.HOST,
-  user: process.env.USER,
-  password: process.env.PASSWORD,
-  database: process.env.DB,
-});
+const db = new Database('./database.sqlite', {verbose: console.log});
 
-// connecting to the database
-connection.connect((error) => {
-  if (error) throw error;
-  console.log("Database connection established");
+try { 
+const createTable = `
+  CREATE TABLE IF NOT EXISTS USERS ( 
+  email TEXT UNIQUE NOT NULL, 
+  password TEXT NOT NULL, 
+  dateOfBirth TEXT UNIQUE NOT NULL, 
+  nickname TEXT UNIQUE NOT NULL
+)
+`;
 
-  let createTable =
-    "CREATE TABLE IF NOT EXISTS USERS ( email varchar(255) unique not null, password varchar(255) not null, dateOfBirth varchar(255) unique not null, nickname varchar(255) unique not null)";
+db.prepare(createTable).run();
 
-  connection.query(createTable, (err) => {
-    if (err) console.log("Cant create table users");
-    else console.log("users table created");
-  });
+const createOTP = `
+  CREATE TABLE IF NOT EXISTS OTP ( 
+  email TEXT UNIQUE NOT NULL, 
+  otp INTEGER
+  )
+  `;
 
+  db.prepare(createOTP).run();
 
-  let createOTP =
-    "CREATE TABLE IF NOT EXISTS OTP ( email varchar(255) unique not null, otp int(6))";
+  console.log('db setup complete');
+} catch (err) {
+console.error('error setting up database', err);
+}
 
+  module.exports = db;
 
-  connection.query(createOTP, (err) => {
-    if (err) console.log("Cant create table otp");
-    else console.log("otp table created");
-  });
-
-});
-
-module.exports = connection;
-//module.exports = mysql;

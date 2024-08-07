@@ -8,7 +8,7 @@ const morgan = require('morgan');
 const path=require('path');
 const fs=require('fs');
 
-const PORT = process.env.PORT || 3004;
+const PORT = process.env.PORT || 3005;
 
 const registerRoute = require('./routes/register');
 const loginRoute = require('./routes/login');
